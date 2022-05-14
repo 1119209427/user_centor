@@ -1,0 +1,48 @@
+syntax="proto3";
+package pb;
+option go_package ="./;pb";
+message UserRequest{
+  string Username=1;
+  string Password=2;
+  string PasswordConfirm=3;
+}
+message SendEmailRequest{
+  string Username=1;
+  string Password=2;
+  string Email=3;
+  //OpertionType 1:绑定邮箱 2：解绑邮箱 3：改密码
+  uint32 OperationType=4;
+}
+message SendEmailRespond{
+  string Code=1;
+  bool  Flag=2;//判断邮件发送是否成功
+
+}
+message UserRequestChangePassword{
+  string Username=1;
+  string OldPassword=2;
+  string NewPassword=3;
+  string NewPasswordConfirm=4;
+
+}
+message UserDetailResponse{
+  UserModel Model=1;
+  uint32 Code=2;
+
+
+}
+message UserModel{
+  uint32 ID=1;
+  string Username=2;
+  int64 CreateTime=3;
+  int64 UpdateTime=4;
+  int64 DeleteTime=5;
+  string Email=6;
+
+}
+service UserService{
+  rpc UserLogin (UserRequest) returns (UserDetailResponse);
+  rpc UserRegister(UserRequest) returns(UserDetailResponse);
+  rpc UserChangePassword(UserRequestChangePassword) returns(UserDetailResponse);
+  rpc UserSendEmail( SendEmailRequest) returns(SendEmailRespond);
+}
